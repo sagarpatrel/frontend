@@ -1,0 +1,33 @@
+FROM node:18
+
+WORKDIR /app
+
+# Install dependencies with legacy-peer-deps flag
+COPY package*.json ./
+RUN npm install --legacy-peer-deps
+
+# Copy source code (this will be overwritten by volume mount)
+COPY . .
+
+# Create proxy configuration if it doesn't exist
+RUN mkdir -p /app/src && echo '{ \
+    "/api": { \
+    "target": "http://backend:8000", \
+    "secure": false, \
+    "changeOrigin": true \
+    }, \
+    "/static": { \
+    "target": "http://backend:8000", \
+    "secure": false \
+    }, \
+    "/media": { \
+    "target": "http://backend:8000", \
+    "secure": false \
+    } \
+    }' > /app/src/proxy.conf.json
+
+# Expose port
+EXPOSE 4200
+
+# Start development server - removed duplicated options
+CMD ["npm", "start"]

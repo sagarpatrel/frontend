@@ -1,0 +1,66 @@
+<div class="profile-container">
+    <h1>Your Profile</h1>
+
+    <div *ngIf="isLoading" class="text-center">
+        <mat-spinner diameter="40" class="spinner-center"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Personal Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                    <div class="form-row">
+                        <mat-form-field appearance="outline">
+                            <mat-label>First Name</mat-label>
+                            <input matInput formControlName="firstName" required>
+                            <mat-error *ngIf="profileForm.get('firstName')?.hasError('required')">
+                                First name is required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput formControlName="lastName" required>
+                            <mat-error *ngIf="profileForm.get('lastName')?.hasError('required')">
+                                Last name is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" required type="email">
+                        <mat-error *ngIf="profileForm.get('email')?.hasError('required')">
+                            Email is required
+                        </mat-error>
+                        <mat-error *ngIf="profileForm.get('email')?.hasError('email')">
+                            Please enter a valid email address
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div class="form-actions">
+                        <button type="submit" mat-raised-button color="primary"
+                            [disabled]="profileForm.invalid || isSaving">
+                            <mat-spinner diameter="20" *ngIf="isSaving"></mat-spinner>
+                            <span *ngIf="!isSaving">Save Changes</span>
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="mt-20">
+            <mat-card-header>
+                <mat-card-title>Account Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p><strong>Username:</strong> {{ userProfile.username }}</p>
+                <p><strong>Joined:</strong> {{ userProfile.date_joined | date }}</p>
+                <p><strong>Last Login:</strong> {{ userProfile.last_login | date }}</p>
+            </mat-card-content>
+        </mat-card>
+    </ng-container>
+</div>

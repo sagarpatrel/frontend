@@ -1,0 +1,95 @@
+<div class="qa-container">
+    <div *ngIf="isLoading" class="text-center">
+        <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <ng-container *ngIf="!isLoading">
+        <h2>Document Q&A</h2>
+
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Document Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p><strong>File:</strong> {{ document?.name }}</p>
+                <p><strong>Type:</strong> {{ document?.type }}</p>
+                <p><strong>Size:</strong> {{ document?.size | number }} KB</p>
+                <p><strong>Uploaded:</strong> {{ document?.created_at | date }}</p>
+
+                <mat-divider></mat-divider>
+
+                <div class="ingestion-status">
+                    <h3>Ingestion Status:
+                        <span [ngClass]="{
+              'status-not-started': ingestionStatus === 'NOT_STARTED',
+              'status-processing': ingestionStatus === 'PROCESSING',
+              'status-completed': ingestionStatus === 'COMPLETED',
+              'status-failed': ingestionStatus === 'FAILED'
+            }">{{ ingestionStatus }}</span>
+                    </h3>
+
+                    <button mat-raised-button color="primary" *ngIf="ingestionStatus === 'NOT_STARTED'"
+                        (click)="startIngestion()">
+                        <mat-icon>upload</mat-icon> Process for Q&A
+                    </button>
+
+                    <mat-progress-bar mode="indeterminate" *ngIf="ingestionStatus === 'PROCESSING'">
+                    </mat-progress-bar>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <ng-container *ngIf="ingestionComplete">
+            <mat-card class="mt-20">
+                <mat-card-header>
+                    <mat-card-title>Ask a Question</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <form (ngSubmit)="askQuestion()">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Your Question</mat-label>
+                            <input matInput [formControl]="questionInput"
+                                placeholder="Ask something about this document...">
+                            <mat-error *ngIf="questionInput.hasError('required')">
+                                Question is required
+                            </mat-error>
+                        </mat-form-field>
+
+                        <button mat-raised-button color="primary" type="submit"
+                            [disabled]="questionInput.invalid || isAskingQuestion">
+                            <mat-spinner diameter="20" *ngIf="isAskingQuestion"></mat-spinner>
+                            <span *ngIf="!isAskingQuestion">Ask</span>
+                        </button>
+                    </form>
+
+                    <div class="current-answer mt-20" *ngIf="currentAnswer">
+                        <h4>Answer:</h4>
+                        <div class="answer-content">{{ currentAnswer }}</div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+
+            <h2 class="mt-20">Previous Questions</h2>
+
+            <mat-accordion *ngIf="questions.length > 0">
+                <mat-expansion-panel *ngFor="let item of questions">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{ item.question }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{ item.asked_at | date:'short' }}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="qa-item-content">
+                        {{ item.answer }}
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <div class="no-questions" *ngIf="questions.length === 0">
+                No questions have been asked yet about this document.
+            </div>
+        </ng-container>
+    </ng-container>
+</div>

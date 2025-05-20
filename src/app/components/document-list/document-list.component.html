@@ -1,0 +1,78 @@
+<div class="document-list-container">
+    <h1>Documents</h1>
+
+    <mat-card>
+        <mat-card-content>
+            <div class="filter-container">
+                <mat-form-field appearance="outline">
+                    <mat-label>Filter</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Search documents">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+            </div>
+
+            <div *ngIf="isLoading" class="text-center">
+                <mat-spinner diameter="40" class="spinner-center"></mat-spinner>
+            </div>
+
+            <div class="table-container" *ngIf="!isLoading">
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+                        <td mat-cell *matCellDef="let document">{{ document.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="created_at">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Added</th>
+                        <td mat-cell *matCellDef="let document">{{ document.created_at | date }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="size">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Size</th>
+                        <td mat-cell *matCellDef="let document">{{ document.size | number }} KB</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="type">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+                        <td mat-cell *matCellDef="let document">{{ document.type }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let document">
+                            <button mat-icon-button color="primary" [routerLink]="['/documents', document.id]"
+                                matTooltip="View">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="deleteDocument(document.id)"
+                                matTooltip="Delete">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="5">
+                            <div class="no-data">
+                                No documents found matching your criteria. Try clearing your filter or <a
+                                    routerLink="/documents/upload">upload new documents</a>.
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <div class="action-buttons mt-20">
+        <button mat-raised-button color="primary" routerLink="/documents/upload">
+            <mat-icon>upload_file</mat-icon> Upload New Document
+        </button>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 140px);
+}
+
+mat-card {
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+}
+
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+mat-spinner {
+  margin-right: 10px;
+  display: inline-block;
+}

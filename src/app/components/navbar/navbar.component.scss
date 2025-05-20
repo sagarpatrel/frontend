@@ -1,0 +1,23 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.title {
+  margin-left: 8px;
+}
+
+.sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+mat-sidenav {
+  width: 250px;
+}
+
+.active {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+mat-icon {
+  margin-right: 8px;
+}

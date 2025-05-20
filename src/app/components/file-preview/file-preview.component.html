@@ -1,0 +1,17 @@
+<div class="file-preview">
+    <ng-container *ngIf="fileType === 'pdf'">
+        <iframe [src]="safeUrl" *ngIf="safeUrl" class="pdf-viewer"></iframe>
+    </ng-container>
+    <ng-container *ngIf="fileType === 'jpg' || fileType === 'jpeg' || fileType === 'png'">
+        <img [src]="safeUrl" *ngIf="safeUrl" class="image-preview">
+    </ng-container>
+    <ng-container *ngIf="fileType !== 'pdf' && fileType !== 'jpg' && fileType !== 'jpeg' && fileType !== 'png'">
+        <div class="no-preview">
+            <mat-icon>insert_drive_file</mat-icon>
+            <p>Preview not available for this file type</p>
+            <a mat-raised-button color="primary" [href]="fileUrl" target="_blank">
+                <mat-icon>download</mat-icon> Download File
+            </a>
+        </div>
+    </ng-container>
+</div>
