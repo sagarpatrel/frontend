@@ -61,7 +61,8 @@
               "buildTarget": "document-management-system:build:production"
             },
             "development": {
-              "buildTarget": "document-management-system:build:development"
+              "buildTarget": "document-management-system:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

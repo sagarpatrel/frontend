@@ -21,7 +21,7 @@ export class LoginComponent {
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
   }
@@ -29,7 +29,13 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.authService.login(this.loginForm.value).subscribe(
+
+      const credentials = {
+        email: this.loginForm.value.email,
+        password: this.loginForm.value.password,
+      };
+
+      this.authService.login(credentials).subscribe(
         () => {
           this.isLoading = false;
           this.router.navigate(['/dashboard']);
